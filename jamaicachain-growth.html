@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JamaicanChain Growth Projections</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            height: 60vh;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .legend {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JamaicanChain Growth Projections (2024-2074)</h1>
+        <div class="chart-container">
+            <canvas id="growthChart"></canvas>
+        </div>
+        <div class="legend">
+            <h3>Key Assumptions:</h3>
+            <ul>
+                <li>Local Users plateau at ~700k (25% of Jamaica's population)</li>
+                <li>International growth continues at a measured pace</li>
+                <li>TPS caps at 100,000 with technological improvements</li>
+                <li>Market cap grows with adoption and utility</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const years = [2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040,2045,2050,2055,2060,2065,2070,2074];
+        const localUsers = [5000,8500,14450,24565,41760,70992,92290,119977,155970,202761,263589,342666,445466,579106,652995,685645,700000,700000,700000,700000,700000,700000,700000,700000];
+        const intlUsers = [1000,1500,2250,3375,5062,7593,11390,17085,25628,38442,57663,86495,129743,194615,291923,437885,568251,832047,1217589,1781280,2606173,3814013,5578459,7521920];
+        const tps = [1000,1300,1690,2197,2856,3712,4826,6274,8156,10603,13784,17919,23295,30284,39369,51180,56298,90725,100000,100000,100000,100000,100000,100000];
+        const marketCap = [50,95,180,342,650,1235,1852,2778,4167,6251,9377,14066,21099,31649,47474,71211,106817,321754,675684,1418937,2979768,6257513,13140778,23653400];
+
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [{
+                    label: 'Local Users',
+                    data: localUsers,
+                    borderColor: '#2563eb',
+                    tension: 0.4
+                }, {
+                    label: 'International Users',
+                    data: intlUsers,
+                    borderColor: '#16a34a',
+                    tension: 0.4
+                }, {
+                    label: 'TPS',
+                    data: tps,
+                    borderColor: '#dc2626',
+                    tension: 0.4
+                }, {
+                    label: 'Market Cap (M USD)',
+                    data: marketCap,
+                    borderColor: '#9333ea',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        type: 'logarithmic',
+                        ticks: {
+                            callback: function(value) {
+                                if (value >= 1000000) return (value/1000000).toFixed(1) + 'M';
+                                if (value >= 1000) return (value/1000).toFixed(1) + 'K';
+                                return value;
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let value = context.raw;
+                                if (value >= 1000000) return context.dataset.label + ': ' + (value/1000000).toFixed(1) + 'M';
+                                if (value >= 1000) return context.dataset.label + ': ' + (value/1000).toFixed(1) + 'K';
+                                return context.dataset.label + ': ' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
